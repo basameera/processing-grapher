@@ -1540,7 +1540,7 @@ void setupSerial () {
 
 		// Get a list of the available serial ports
 		String[] ports = Serial.list();
-
+    portNumber = 0; //fix and issue with connecting to serial port
 		// If no ports are available
 		if(ports.length == 0) {
 
