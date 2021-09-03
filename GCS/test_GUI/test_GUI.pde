@@ -28,7 +28,7 @@ PlotElement p1;
 
 Graph LineGraph = new Graph(96, 70, 600, 200, color(20, 20, 200));
 
-Plot LinePlot = new Plot(96, 400, 600, 200, color(20, 20, 200));
+Plot LinePlot = new Plot(96, 400, 600, 200);
 
 float ydata;
 
@@ -41,9 +41,9 @@ float[] lineGraphSampleNumbers = new float[100];
 
 // Runs 1
 void setup() {
-  surface.setTitle("Realtime plotter");
+  surface.setTitle("Real-time plotter");
   size(1000, 800);
-  frameRate(60);
+  frameRate(30);
   cp5 = new ControlP5(this);
 
   p1 = new PlotElement("Plot 1", "time", "data", 800, 10, 50, 50);
