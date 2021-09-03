@@ -30,6 +30,7 @@ Graph LineGraph = new Graph(96, 300, 600, 200, color(20, 20, 200));
 
 float ydata;
 
+// these below should be inside the class
 int number_of_lines_per_graph = 1;
 float[][] lineGraphValues = new float[number_of_lines_per_graph][100];
 float[] lineGraphSampleNumbers = new float[100];
