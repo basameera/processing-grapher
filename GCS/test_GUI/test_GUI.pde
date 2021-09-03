@@ -59,7 +59,7 @@ void setup() {
   LineGraph.yMax=10; 
   LineGraph.yMin=-10;
   
-  LinePlot.yMax=10; 
+  //LinePlot.yMax=10; 
   LinePlot.yMin=-10;
 
 

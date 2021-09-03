@@ -13,15 +13,11 @@
 class Plot 
 {
 
-  boolean Dot=true;            // Draw dots at each data point if true
   boolean RightAxis;            // Draw the next Plot using the right axis if true
-  boolean ErrorFlag=false;      // If the time array isn't in ascending order, make true  
-  boolean ShowMouseLines=true;  // Draw lines and give values of the mouse position
 
   int     xDiv=5, yDiv=5;            // Number of sub divisions
   int     xPos, yPos;            // location of the top left corner of the Plot  
   int     Width, Height;         // Width and height of the Plot
-
 
   color   PlotColor;
   color   BackgroundColor=color(255);  
@@ -31,13 +27,11 @@ class Plot
   String  xLabel="x - Label";
   String  yLabel="y - Label";
 
-  float   yMax=1024, yMin=0;      // Default axis dimensions
+  float   yMax=100, yMin=0;      // Default axis dimensions
   float   xMax=10, xMin=0;
   float   yMaxRight=1024, yMinRight=0;
 
-  PFont   Font;                   // Selected font used for text 
 
-  //    int Peakcounter=0,nPeakcounter=0;
 
   Plot(int x, int y, int w, int h) {  // The main declaration function
     xPos = x;
@@ -68,16 +62,16 @@ class Plot
     color(0);
     stroke(0);
     strokeWeight(1);
-    rect(xPos+Width/2-c/2, yPos-35, c, 0);                         // Heading Rectangle  
+    rect(xPos+Width/2-c/2, yPos-8, c, 0);                         // Heading Rectangle  
 
     fill(0);
-    text(Title, xPos+Width/2, yPos-37);                            // Heading Title
+    text(Title, xPos+Width/2, yPos-10);                            // Heading Title
     textAlign(CENTER);
     textSize(14);
     text(xLabel, xPos+Width/2, yPos+Height+t/1.5);                     // x-axis Label 
 
     rotate(-PI/2);                                               // rotate -90 degrees
-    text(yLabel, -yPos-Height/2, xPos-t*1.6+20);                   // y-axis Label  
+    text(yLabel, -yPos-Height/2, xPos-t*1.6+40);                   // y-axis Label  
     rotate(PI/2);                                                // rotate back
 
     textSize(10); 
@@ -88,6 +82,8 @@ class Plot
     //Edges
     line(xPos-3, yPos+Height, xPos-3, yPos);                        // y-axis line 
     line(xPos-3, yPos+Height, xPos+Width+5, yPos+Height);           // x-axis line 
+    stroke(200);
+    line(xPos-3, yPos, xPos+Width+5, yPos);           // x-axis line 
 
     stroke(200);
     if (yMin<0) {
@@ -138,9 +134,10 @@ class Plot
       fill(20);
 
       String yAxis=str(yMin+float(y)/yDiv*(yMax-yMin));     // Make y Label a string
+      println(yAxis);
       String[] yAxisMS=split(yAxis, '.');                    // Split string
 
-      text(yAxisMS[0]+"."+yAxisMS[1].charAt(0), // ... 
+      text(yAxisMS[0], // ... 
         xPos-15, float(yDiv-y)/yDiv*Height+yPos+3);       // y-axis Labels 
 
 
