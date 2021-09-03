@@ -17,7 +17,7 @@ import controlP5.*;
 ControlP5 cp5;
 Canvas cc;
 
-PlotClass p1, p2;
+PlotElement p1;
 
 
 /*
@@ -26,7 +26,9 @@ PlotClass p1, p2;
  If not only add/edit those features.
  */
 
-Graph LineGraph = new Graph(96, 300, 600, 200, color(20, 20, 200));
+Graph LineGraph = new Graph(96, 70, 600, 200, color(20, 20, 200));
+
+Plot LinePlot = new Plot(96, 400, 600, 200, color(20, 20, 200));
 
 float ydata;
 
@@ -44,7 +46,7 @@ void setup() {
   frameRate(60);
   cp5 = new ControlP5(this);
 
-  p1 = new PlotClass("Plot 1", "time", "data", 10, 10, 400, 200);
+  p1 = new PlotElement("Plot 1", "time", "data", 800, 10, 50, 50);
   p1.pre(); // use cc.post(); to draw on top of existing controllers.
   cp5.addCanvas(p1);
 
@@ -56,6 +58,9 @@ void setup() {
   LineGraph.xMin=-100;  
   LineGraph.yMax=10; 
   LineGraph.yMin=-10;
+  
+  LinePlot.yMax=10; 
+  LinePlot.yMin=-10;
 
 
   // *** NOTE: Put the below stuff inside inside class.
@@ -76,11 +81,12 @@ int i=0;
 void draw() {
 
   background(0);
-  LineGraph.DrawAxis();  
+  LineGraph.DrawAxis();
+  LinePlot.DrawAxis();
 
 
   ydata = sin(frameCount*0.1)*10;
-  println(ydata);
+  
 
   // *** NOTE: Put the below stuff inside inside class.
   // update line graph
@@ -98,7 +104,7 @@ void draw() {
 
 
   LineGraph.LineGraph(lineGraphSampleNumbers, lineGraphValues[0]);
-
+  LinePlot.Line(lineGraphSampleNumbers, lineGraphValues[0]);
 
   textAlign(LEFT);
 }
