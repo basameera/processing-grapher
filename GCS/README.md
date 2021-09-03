@@ -1,5 +1,22 @@
 Ground Control Station for Robotics
 
+## ToDo
+
+* `test_GUI` now has a simple working graph based on `GraphClass`.
+* Using this add the following stuff; 
+  + just have a function `chart.push(new_data_sample)` to insert new data to a plot
+  + x axis buffer init - make as a class method
+  + both x, y axis buffer shifting, add as class method
+
+## Notes
+
+* controlP5 chart is not suitable for this case.
+  + Tested with `test_graph`
+  + It does not have the following requirements
+    - At least 2 lines (diff. color) in one chart
+    - Auto adjust Y lims
+    - X,Y axis labels
+
 ## Inspirations from 
 
 RealtimePlotter: https://github.com/sebnil/RealtimePlotter
