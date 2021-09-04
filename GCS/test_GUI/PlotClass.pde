@@ -9,36 +9,80 @@
  
  =================================================================================*/
 
+/*
+To Do
+* multi line
+* init inside
+
+*/
 
 class Plot 
 {
 
-  boolean RightAxis;            // Draw the next Plot using the right axis if true
-
-  int     xDiv=5, yDiv=5;            // Number of sub divisions
+  int     xDiv=5, yDiv=11;            // Number of sub divisions
   int     xPos, yPos;            // location of the top left corner of the Plot  
   int     Width, Height;         // Width and height of the Plot
 
+  /*
+  Color schemes
+   
+   Dark theme
+   -----------
+   Background = grey
+   outline (stroke) = white
+   axis and fonts = white
+   
+   
+   Light theme
+   -----------
+   Background = white
+   outline (stroke) = black
+   axis and fonts = black
+   
+   */
+
+  boolean dark_theme = true;
+
+  color   L_PlotColor = color(250, 20, 20);
+  color   L_BackgroundColor = color(255);  
+  color   L_StrokeColor = color(150);
+  color   L_AxisColor = color(0);
+
+  color   D_PlotColor = color(250, 100, 100);
+  color   D_BackgroundColor = color(30);  
+  color   D_StrokeColor = color(100);
+  color   D_AxisColor = color(250);
+
   color   PlotColor;
-  color   BackgroundColor=color(255);  
-  color   StrokeColor=color(180);     
+  color   BackgroundColor;  
+  color   StrokeColor;
+  color   AxisColor;
 
   String  Title="Title";          // Default titles
   String  xLabel="x - Label";
   String  yLabel="y - Label";
 
-  float   yMax=100, yMin=0;      // Default axis dimensions
+  float   yMax=20, yMin=-20;      // Default axis dimensions
   float   xMax=10, xMin=0;
-  float   yMaxRight=1024, yMinRight=0;
 
-
-
-  Plot(int x, int y, int w, int h) {  // The main declaration function
+  // The main declaration function
+  Plot(int x, int y, int w, int h) {
     xPos = x;
     yPos = y;
     Width = w;
     Height = h;
-    PlotColor = color(250, 20, 20);
+
+    if (dark_theme) {
+      PlotColor = D_PlotColor;
+      BackgroundColor = D_BackgroundColor;
+      StrokeColor = D_StrokeColor;
+      AxisColor = D_AxisColor;
+    } else {
+      PlotColor = L_PlotColor;
+      BackgroundColor = L_BackgroundColor;
+      StrokeColor = L_StrokeColor;
+      AxisColor = L_AxisColor;
+    }
   }
 
 
@@ -48,124 +92,92 @@ class Plot
     //Main axes Lines, Plot Labels, Plot Background
     //==========================================================================================
 
+    // background
     fill(BackgroundColor); 
     color(0);
     stroke(StrokeColor);
     strokeWeight(1);
-    int t=60;
+    int t = 60;
 
-    rect(xPos-t*1.6, yPos-t, Width+t*2.5, Height+t*2);            // outline
+    // outline
+    rect(xPos-t*1.3, yPos-t*0.7, Width+t*2, Height+t*1.5, 5);
+
+    stroke(AxisColor);
+    // title
     textAlign(CENTER);
     textSize(18);
-    float c=textWidth(Title);
-    fill(BackgroundColor); 
-    color(0);
-    stroke(0);
-    strokeWeight(1);
-    rect(xPos+Width/2-c/2, yPos-8, c, 0);                         // Heading Rectangle  
 
-    fill(0);
-    text(Title, xPos+Width/2, yPos-10);                            // Heading Title
+    // Title
+    fill(AxisColor);
+    text(Title, xPos+Width/2, yPos-10);
+
+    // x-axis Label 
     textAlign(CENTER);
     textSize(14);
-    text(xLabel, xPos+Width/2, yPos+Height+t/1.5);                     // x-axis Label 
+    text(xLabel, xPos+Width/2, yPos+Height+t/1.7);                     
 
-    rotate(-PI/2);                                               // rotate -90 degrees
-    text(yLabel, -yPos-Height/2, xPos-t*1.6+40);                   // y-axis Label  
-    rotate(PI/2);                                                // rotate back
+    // rotate -90 degrees
+    rotate(-PI/2);
+    // y-axis Label
+    text(yLabel, -yPos-Height/2, xPos-t*1.6+45);
+    // rotate back
+    rotate(PI/2);
 
+    //=========================================================================================
+    // Axis lines
+    //=========================================================================================
     textSize(10); 
     noFill(); 
-    stroke(0); 
+    stroke(AxisColor); 
     smooth();
     strokeWeight(1);
     //Edges
     line(xPos-3, yPos+Height, xPos-3, yPos);                        // y-axis line 
     line(xPos-3, yPos+Height, xPos+Width+5, yPos+Height);           // x-axis line 
-    stroke(200);
+    stroke(StrokeColor);
     line(xPos-3, yPos, xPos+Width+5, yPos);           // x-axis line 
 
-    stroke(200);
+    //=========================================================================================
+    // Zero line
+    //=========================================================================================
+    stroke(StrokeColor);
     if (yMin<0) {
-      line(xPos-7, // zero line 
-        yPos+Height-(abs(yMin)/(yMax-yMin))*Height, // 
+      line(xPos-7, 
+        yPos+Height-(abs(yMin)/(yMax-yMin))*Height, 
         xPos+Width, 
         yPos+Height-(abs(yMin)/(yMax-yMin))*Height
         );
     }
 
-    if (RightAxis) {                                       // Right-axis line   
-      stroke(0);
-      line(xPos+Width+3, yPos+Height, xPos+Width+3, yPos);
-    }
-
     //=========================================================================================
     //Sub-devisions for both axes, left and right
-    //========================================================================================== 
+    //=========================================================================================
 
-    stroke(0);
+    stroke(AxisColor);
+    textSize(10); 
+
+    //=========================================================================================
+    // x-axis sub divisions
+    //=========================================================================================
 
     for (int x=0; x<=xDiv; x++) {
-
-      //=========================================================================================
-      //x-axis
-      //==========================================================================================
-
-      line(float(x)/xDiv*Width+xPos-3, yPos+Height, //  x-axis Sub devisions    
-        float(x)/xDiv*Width+xPos-3, yPos+Height+5);     
-
-      textSize(10);                                      // x-axis Labels
-      String xAxis=str(xMin+float(x)/xDiv*(xMax-xMin));  // the only way to get a specific number of decimals 
-      String[] xAxisMS=split(xAxis, '.');                 // is to split the float into strings 
-      text(xAxisMS[0]+"."+xAxisMS[1].charAt(0), // ...
-        float(x)/xDiv*Width+xPos-3, yPos+Height+15);   // x-axis Labels
+      line(float(x)/xDiv*Width+xPos-3, yPos+Height, float(x)/xDiv*Width+xPos-3, yPos+Height+5);     
+      String xAxis=str(xMin+float(x)/xDiv*(xMax-xMin));
+      String[] xAxisMS=split(xAxis, '.');
+      text(xAxisMS[0]+"."+xAxisMS[1].charAt(0), float(x)/xDiv*Width+xPos-3, yPos+Height+15);
     }
 
 
     //=========================================================================================
-    //left y-axis
-    //========================================================================================== 
+    // y-axis
+    //=========================================================================================
+    textAlign(RIGHT);
 
     for (int y=0; y<=yDiv; y++) {
-      line(xPos-3, float(y)/yDiv*Height+yPos, // ...
-        xPos-7, float(y)/yDiv*Height+yPos);              // y-axis lines 
-
-      textAlign(RIGHT);
-      fill(20);
-
-      String yAxis=str(yMin+float(y)/yDiv*(yMax-yMin));     // Make y Label a string
-      println(yAxis);
-      String[] yAxisMS=split(yAxis, '.');                    // Split string
-
-      text(yAxisMS[0], // ... 
-        xPos-15, float(yDiv-y)/yDiv*Height+yPos+3);       // y-axis Labels 
-
-
-      //=========================================================================================
-      //right y-axis
-      //==========================================================================================
-
-      if (RightAxis) {
-
-        color(PlotColor); 
-        stroke(PlotColor);
-        fill(20);
-
-        line(xPos+Width+3, float(y)/yDiv*Height+yPos, // ...
-          xPos+Width+7, float(y)/yDiv*Height+yPos);            // Right Y axis sub devisions
-
-        textAlign(LEFT); 
-
-        String yAxisRight=str(yMinRight+float(y)/                // ...
-          yDiv*(yMaxRight-yMinRight));           // convert axis values into string
-        String[] yAxisRightMS=split(yAxisRight, '.');             // 
-
-        text(yAxisRightMS[0]+"."+yAxisRightMS[1].charAt(0), // Right Y axis text
-          xPos+Width+15, float(yDiv-y)/yDiv*Height+yPos+3);   // it's x,y location
-
-        noFill();
-      }
-      stroke(0);
+      line(xPos-3, float(y)/yDiv*Height+yPos, xPos-7, float(y)/yDiv*Height+yPos);
+      String yAxis=str(yMin+float(y)/yDiv*(yMax-yMin));
+      String[] yAxisMS=split(yAxis, '.');
+      text(yAxisMS[0]+"."+yAxisMS[1].charAt(0), xPos-15, float(yDiv-y)/yDiv*Height+yPos+3);
     }
   }
 

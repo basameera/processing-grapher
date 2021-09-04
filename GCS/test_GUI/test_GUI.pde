@@ -28,7 +28,7 @@ PlotElement p1;
 
 Graph LineGraph = new Graph(96, 70, 600, 200, color(20, 20, 200));
 
-Plot LinePlot = new Plot(96, 400, 600, 200);
+Plot LinePlot = new Plot(196, 400, 800, 500);
 
 float ydata;
 
@@ -42,7 +42,7 @@ float[] lineGraphSampleNumbers = new float[100];
 // Runs 1
 void setup() {
   surface.setTitle("Real-time plotter");
-  size(1000, 800);
+  size(1200, 1000);
   frameRate(30);
   cp5 = new ControlP5(this);
 
@@ -60,7 +60,7 @@ void setup() {
   LineGraph.yMin=-10;
   
   //LinePlot.yMax=10; 
-  LinePlot.yMin=-10;
+  //LinePlot.yMin=-20;
 
 
   // *** NOTE: Put the below stuff inside inside class.
