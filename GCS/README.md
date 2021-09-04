@@ -3,13 +3,14 @@ Ground Control Station for Robotics
 ## ToDo
 
 * `test_GUI` now has a simple working graph based on `GraphClass`.
-* Using this add the following stuff; 
-  + just have a function `chart.push(new_data_sample)` to insert new data to a plot
-  + x axis buffer init - make as a class method
-  + both x, y axis buffer shifting, add as class method
 
 ## Notes
 
+* `test_PlotClas` is ready
+  + Using this add the following stuff; 
+    - just have a function `chart.push(new_data_sample)` to insert new data to a plot
+    - x axis buffer init - make as a class method
+    - both x, y axis buffer shifting, add as class method
 * controlP5 chart is not suitable for this case.
   + Tested with `test_graph`
   + It does not have the following requirements
