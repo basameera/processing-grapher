@@ -28,7 +28,7 @@ PlotElement p1;
 
 Graph LineGraph = new Graph(96, 70, 600, 200, color(20, 20, 200));
 
-Plot LinePlot = new Plot(196, 400, 800, 500);
+Plot LinePlot = new Plot(196, 400, 800, 500, 3);
 
 float ydata;
 
@@ -58,10 +58,13 @@ void setup() {
   LineGraph.xMin=-100;  
   LineGraph.yMax=10; 
   LineGraph.yMin=-10;
-  
+
   //LinePlot.yMax=10; 
   //LinePlot.yMin=-20;
-
+  LinePlot.init();
+  LinePlot.setColor(color(255, 0, 0), 0);
+  LinePlot.setColor(color(0, 255, 0), 1);
+  LinePlot.setColor(color(0, 255, 200), 2);
 
   // *** NOTE: Put the below stuff inside inside class.
   // build x axis values for the line graph
@@ -86,7 +89,7 @@ void draw() {
 
 
   ydata = sin(frameCount*0.1)*10;
-  
+
 
   // *** NOTE: Put the below stuff inside inside class.
   // update line graph
@@ -104,7 +107,13 @@ void draw() {
 
 
   LineGraph.LineGraph(lineGraphSampleNumbers, lineGraphValues[0]);
-  LinePlot.Line(lineGraphSampleNumbers, lineGraphValues[0]);
+  //LinePlot.Line(lineGraphSampleNumbers, lineGraphValues[0]);
+
+  LinePlot.push(ydata, 0);
+  LinePlot.push(-ydata*1.6, 1);
+  LinePlot.push(5, 2);
+  LinePlot.drawLine();
+
 
   textAlign(LEFT);
 }

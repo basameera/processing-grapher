@@ -11,10 +11,28 @@
 
 /*
 To Do
-* multi line
-* init inside
+ * multi line
+ * init inside
+ 
+ */
 
-*/
+/*
+  Color schemes
+ 
+ Dark theme
+ -----------
+ Background = grey
+ outline (stroke) = white
+ axis and fonts = white
+ 
+ 
+ Light theme
+ -----------
+ Background = white
+ outline (stroke) = black
+ axis and fonts = black
+ 
+ */
 
 class Plot 
 {
@@ -22,24 +40,6 @@ class Plot
   int     xDiv=5, yDiv=11;            // Number of sub divisions
   int     xPos, yPos;            // location of the top left corner of the Plot  
   int     Width, Height;         // Width and height of the Plot
-
-  /*
-  Color schemes
-   
-   Dark theme
-   -----------
-   Background = grey
-   outline (stroke) = white
-   axis and fonts = white
-   
-   
-   Light theme
-   -----------
-   Background = white
-   outline (stroke) = black
-   axis and fonts = black
-   
-   */
 
   boolean dark_theme = true;
 
@@ -58,19 +58,32 @@ class Plot
   color   StrokeColor;
   color   AxisColor;
 
-  String  Title="Title";          // Default titles
+  String  Title="PlotClass Title";
   String  xLabel="x - Label";
   String  yLabel="y - Label";
 
-  float   yMax=20, yMin=-20;      // Default axis dimensions
+  float   yMax=20, yMin=-20;
   float   xMax=10, xMin=0;
 
+  // data 
+  int n_lines = 2;
+  int buff_size = 100;
+  float[] XValues;
+  float[][] YValues;
+  color[] line_colors;
+
   // The main declaration function
-  Plot(int x, int y, int w, int h) {
+  Plot(int x, int y, int w, int h, int _n_lines) {
     xPos = x;
     yPos = y;
     Width = w;
     Height = h;
+
+    n_lines = _n_lines;
+
+    XValues = new float[buff_size];
+    YValues = new float[n_lines][buff_size];
+    line_colors = new color[n_lines];
 
     if (dark_theme) {
       PlotColor = D_PlotColor;
@@ -83,8 +96,9 @@ class Plot
       StrokeColor = L_StrokeColor;
       AxisColor = L_AxisColor;
     }
-  }
 
+    init();
+  }
 
   void DrawAxis() {
 
@@ -181,12 +195,39 @@ class Plot
     }
   }
 
+  void init() {
+    // initialize X, Y buffers
+    for (int i=0; i<YValues.length; i++) {
+      for (int k=0; k<YValues[0].length; k++) {
+        YValues[i][k] = 0;
+        if (i==0)
+          XValues[k] = k;
+      }
+    }
+  }
+
+  void setColor(color val, int line) {
+    line_colors[line] = val;
+  }
+
+  void push(float val, int line) {
+    try {
+
+      for (int k=0; k<YValues[line].length-1; k++) {
+        YValues[line][k] = YValues[line][k+1];
+      }
+
+      YValues[line][YValues[line].length-1] = val;
+    }
+    catch (Exception e) {
+    }
+  }
+
   //=========================================================================================
   //Streight line Plot 
   //========================================================================================== 
 
   void Line(float[] x, float[] y) {
-
     for (int i=0; i<(x.length-1); i++) {
       strokeWeight(2);
       stroke(PlotColor);
@@ -196,6 +237,24 @@ class Plot
         yPos+Height-(y[i]/(yMax-yMin)*Height)+(yMin)/(yMax-yMin)*Height, 
         xPos+(x[i+1]-x[0])/(x[x.length-1]-x[0])*Width, 
         yPos+Height-(y[i+1]/(yMax-yMin)*Height)+(yMin)/(yMax-yMin)*Height);
+    }
+  }
+
+  void drawLine() {
+    float[] x = XValues;
+    for (int n=0; n<YValues.length; n++) {
+      float[] y = YValues[n];
+      PlotColor = line_colors[n];
+      for (int i=0; i<(x.length-1); i++) {
+        strokeWeight(1);
+        stroke(PlotColor);
+        noFill();
+        smooth();
+        line(xPos+(x[i]-x[0])/(x[x.length-1]-x[0])*Width, 
+          yPos+Height-(y[i]/(yMax-yMin)*Height)+(yMin)/(yMax-yMin)*Height, 
+          xPos+(x[i+1]-x[0])/(x[x.length-1]-x[0])*Width, 
+          yPos+Height-(y[i+1]/(yMax-yMin)*Height)+(yMin)/(yMax-yMin)*Height);
+      }
     }
   }
 }
