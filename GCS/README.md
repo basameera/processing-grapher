@@ -1,12 +1,8 @@
 Ground Control Station for Robotics
 
-## ToDo
-
-* `test_GUI` now has a simple working graph based on `GraphClass`.
-
 ## Notes
 
-* `test_PlotClas` is ready
+* `test_PlotClass` is ready
   + Using this add the following stuff; 
     - just have a function `chart.push(new_data_sample)` to insert new data to a plot
     - x axis buffer init - make as a class method
@@ -17,6 +13,7 @@ Ground Control Station for Robotics
     - At least 2 lines (diff. color) in one chart
     - Auto adjust Y lims
     - X,Y axis labels
+* `test_GUI` now has a simple working graph based on `GraphClass`.
 
 ## Inspirations from 
 
@@ -24,3 +21,5 @@ RealtimePlotter: https://github.com/sebnil/RealtimePlotter
 BPS GCS: https://www.youtube.com/watch?v=fYsA3T8rlhg
 Serial Studio: https://github.com/Serial-Studio/Serial-Studio
 Processing Grapher: https://github.com/chillibasket/processing-grapher
+
+> TODO: in Notion
