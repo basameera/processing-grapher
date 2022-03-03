@@ -19,13 +19,13 @@ ControlP5 cp5;
 GUI_Element p1;
 
 Plot LinePlot = new Plot(90, 50, 400, 200, 3);
-
+PrintWriter output;
 float ydata;
 
 // Runs 1
 void setup() {
   surface.setTitle("Real-time plotter");
-  size(1200, 1000);
+  size(800, 800);
   frameRate(30);
   cp5 = new ControlP5(this);
 
@@ -42,7 +42,7 @@ void setup() {
   LinePlot.setColor(color(255, 0, 0), 0);
   LinePlot.setColor(color(0, 255, 0), 1);
   LinePlot.setColor(color(0, 255, 200), 2);
-
+  output = createWriter("data.csv");
 }
 
 // runs 3
@@ -51,12 +51,21 @@ void draw() {
   background(0);
   
   ydata = sin(frameCount*0.1)*10;
-
+  float a, b, c;
+  a = ydata;
+  b = -ydata*1.6;
+  c = -15;
   LinePlot.DrawAxis();
-  LinePlot.push(ydata, 0);
-  LinePlot.push(-ydata*1.6, 1);
-  LinePlot.push(-15, 2);
+  LinePlot.push(a, 0);
+  LinePlot.push(b, 1);
+  LinePlot.push(c, 2);
   LinePlot.drawLine();
-
+  //output.println(a + "," + b + "," + c);
   textAlign(LEFT);
+}
+
+void keyPressed() {
+  output.flush();  // Writes the remaining data to the file
+  output.close();  // Finishes the file
+  exit();  // Stops the program
 }
